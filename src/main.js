@@ -29,9 +29,10 @@ let config = {
             }
         }
     },
-    width: 1440,
+    width: 1420,
     height: 900,
-    scene: [Load, Platformer]
+    backgroundColor: '#5197ed',
+    scene: [Load, Platformer, End]
 }
 
 var cursors;
