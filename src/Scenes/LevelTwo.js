@@ -13,6 +13,9 @@ class LevelTwo extends Phaser.Scene {
         this.PARTICLE_VELOCITY = 50;
         this.SCALE = 2.0;
         this.gemPicked = 0;
+        this.health = 4;
+        this.SpawnX = 30;
+        this.SpawnY = 220;
     }
 
     create() {
@@ -153,14 +156,7 @@ class LevelTwo extends Phaser.Scene {
         this.cameras.main.setZoom(this.SCALE);
         
 
-        this.isDying = false;
-        this.physics.add.collider(
-         my.sprite.player,
-         this.dangerLayer,
-         this.playerDeath,
-         null,
-         this
-         );
+        
 //         this.physics.add.collider(
   //       my.sprite.player,
     //     this.waterLayer,
@@ -173,6 +169,15 @@ class LevelTwo extends Phaser.Scene {
     }
 
     update() {
+        this.isDying = false;
+        this.physics.add.collider(
+         my.sprite.player,
+         this.dangerLayer,
+         this.playerDeath,
+         null,
+         this
+         );
+
     this.playerX = my.sprite.player.x;
     this.playerY = my.sprite.player.y;
 
@@ -323,7 +328,15 @@ class LevelTwo extends Phaser.Scene {
         ease: "Power2",
         yoyo: true,
         onComplete: () => {
-            this.scene.start("levelTwoScene");
+            if (this.health > 0){
+                this.health -= 1;
+                console.log(this.health);
+                my.sprite.player.x = this.SpawnX;
+                my.sprite.player.y = this.SpawnY;
+            } else if(this.health == 0){
+                console.log(this.health);
+                this.scene.start("level1Scene");
+            }
         }
     });
 }
