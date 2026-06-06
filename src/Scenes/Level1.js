@@ -116,9 +116,17 @@ class Level1 extends Phaser.Scene {
             emitting: false
         });
         // TODO: Add coin collision handler
+        this.switch.id = 64;
         this.physics.add.overlap(my.sprite.player, this.switch, (obj1, obj2) => {
-            if(this.key.isDown){
-                obj2.index = 66;
+            if(Phaser.Input.Keyboard.JustDown(this.key)){
+                if(obj2.id == 64){
+                    obj2.setFrame(66);
+                    obj2.id = 66;
+                }
+                else{
+                    obj2.setFrame(64);
+                    obj2.id = 64;
+                }
                 this.fallLayer.forEachTile(tile => {
                 if(tile.index !== -1){
                     tile.visible = true;
