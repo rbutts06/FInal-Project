@@ -19,6 +19,7 @@ class Load extends Phaser.Scene {
 
         this.load.audio("collect", "collection.mp3");
         this.load.audio("jumping", "jumper.mp3");
+        this.load.audio("bang", "jingles_HIT14.ogg")
 
         // Load the tilemap as a spritesheet
         this.load.spritesheet("tilemap_sheet", "tilemap_packed.png", {
@@ -72,6 +73,7 @@ class Load extends Phaser.Scene {
 
          // ...and pass to the next Scene
          //DO NOT PUSH!!!!!!!!
+         //this.scene.start("levelTwoScene");
          this.scene.start("level1Scene");
     }
 
