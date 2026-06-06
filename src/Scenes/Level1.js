@@ -194,13 +194,6 @@ class Level1 extends Phaser.Scene {
             // TODO: Try: gravityY: -400,
             alpha: {start: 1, end: 0.1}, 
         });
-        my.vfx.jumped = this.add.particles(0, 0, "kenny-particles", {
-            frame: 'dirt_01.png',
-            scale: {start: 0.03, end: 0},
-            lifespan: 600,
-            quantity: 2,
-            emitting: false
-        });
 
         my.vfx.walking.stop();
         
@@ -269,17 +262,6 @@ class Level1 extends Phaser.Scene {
         if(my.sprite.player.body.blocked.down && Phaser.Input.Keyboard.JustDown(cursors.up)) {
             my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
             this.jumpSound.play();
-            my.vfx.jumped.setConfig({
-                frame: 'dirt_01.png',
-                x: my.sprite.player.x,
-                y: my.sprite.player.y + 10,
-                scale: {start: 0.1, end: 0},
-                lifespan: 600,
-                quantity: 4,
-                blendMode: 'MULTIPLY',
-                emitting: true,
-                duration: 10
-            });
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
