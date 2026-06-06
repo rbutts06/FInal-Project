@@ -9,6 +9,7 @@ class LevelTwo extends Phaser.Scene {
         this.DRAG = 1000;  
         this.physics.world.gravity.y = 1500;
         this.JUMP_VELOCITY = -600;
+        this.SWIM_VELOCITY = 100;
         this.PARTICLE_VELOCITY = 50;
         this.SCALE = 2.0;
     }
@@ -48,11 +49,31 @@ class LevelTwo extends Phaser.Scene {
         });
          this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
         this.coinGroup = this.add.group(this.coins);
+
+        this.swimming = false;
        
         my.sprite.player = this.physics.add.sprite(30, 220, "platformer_characters", "tile_0005.png");
         my.sprite.player.setCollideWorldBounds(true);
         this.physics.world.setBounds(0,0,this.map.widthInPixels,this.map.heightInPixels);
         this.physics.add.collider(my.sprite.player, this.groundLayer);
+        this.waterTiles = this.groundLayer.filterTiles(tile => {
+            return tile.properties.isWater == true;
+        });
+        
+ //       this.waterTiles.forEach(tile => {
+   //      this.physics.add.overlap(my.sprite.player, tile, (obj1, obj2) => {
+     //       console.log("swimming!");
+       //     this.swimming = true;
+         //});
+        //});
+        
+        let splash = (obj1, obj2) => {
+            console.log("swimming!");
+            this.swimming = true;
+        }
+        this.physics.add.collider(my.sprite.player, this.waterTiles, splash);
+
+        
         this.physics.add.collider(my.sprite.player, this.fallingLayer);
        // this.physics.add.collider(my.sprite.player, this.dangerLayer);
        console.log("player created");
@@ -145,7 +166,7 @@ class LevelTwo extends Phaser.Scene {
         if (this.isDying) {
          return;
         }        
-
+        if (this.swimming == false){
         if(cursors.left.isDown) {
             my.sprite.player.setAccelerationX(-this.ACCELERATION);
             my.sprite.player.resetFlip();
@@ -203,6 +224,58 @@ class LevelTwo extends Phaser.Scene {
             this.scene.restart();
         }
     }
+    if (this.swimming == true){
+        my.sprite.player.tint = 0x0000FF;
+        this.physics.world.gravity.y = 500;
+        if(cursors.left.isDown) {
+            my.sprite.player.setAccelerationX(-this.SWIM_VELOCITY);
+            my.sprite.player.resetFlip();
+            my.sprite.player.anims.play('walk', true);
+
+            //make vfx swimming?
+                my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
+                my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+                my.vfx.walking.start();
+            
+            
+
+        } else if(cursors.right.isDown) {
+            my.sprite.player.setAccelerationX(this.SWIM_VELOCITY);
+            my.sprite.player.setFlip(true, false);
+            my.sprite.player.anims.play('walk', true);
+
+            //make vfx swimming?
+                my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/10-2, my.sprite.player.displayHeight/2-5, false);
+                my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+                my.vfx.walking.start();
+          
+              my.vfx.walking.stop();
+            
+            
+
+        } else {
+            my.sprite.player.setAccelerationX(0);
+            my.sprite.player.setDragX(this.DRAG);
+            my.sprite.player.anims.play('idle');
+
+             my.vfx.walking.stop();
+        }
+
+        if(!my.sprite.player.body.blocked.down) {
+           //bubbles?
+        }else{
+          //my.vfx.jumping.stop();
+        }
+        if(cursors.up.isDown) {
+            my.sprite.player.body.setVelocityY(-this.SWIM_VELOCITY);
+            my.sprite.player.anims.play('walk', true);
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
+            this.scene.restart();
+        }
+    }
+}
 
     playerDeath() {
     if (this.isDying) return;
