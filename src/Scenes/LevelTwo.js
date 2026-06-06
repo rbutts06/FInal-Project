@@ -60,7 +60,7 @@ class LevelTwo extends Phaser.Scene {
           my.sprite.player,
           this.endGoal,
           () => {
-            this.scene.start("endCopy");
+            this.scene.start("level1Scene");
            },
            null,
            this
@@ -219,7 +219,7 @@ class LevelTwo extends Phaser.Scene {
         ease: "Power2",
         yoyo: true,
         onComplete: () => {
-            this.scene.start("loadScene");
+            this.scene.start("levelTwoScene");
         }
     });
 }
