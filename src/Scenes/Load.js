@@ -16,6 +16,7 @@ class Load extends Phaser.Scene {
         this.load.tilemapTiledJSON("lvl1Back", "lvl1Back.tmj");
         this.load.tilemapTiledJSON("HamsterDisasterUpdate", "HamsterDisasterUpdate.tmj");
         this.load.tilemapTiledJSON("endScreen", "endScreen.tmj");
+        this.load.tilemapTiledJSON("Level3Map", "Level3Map.tmj");
 
         this.load.audio("collect", "collection.mp3");
         this.load.audio("jumping", "jumper.mp3");
