@@ -101,20 +101,21 @@ class Level1 extends Phaser.Scene {
         my.sprite.player = this.physics.add.sprite(this.spawnX, this.spawnY, "platformer_characters", "tile_0005.png");
         my.sprite.player.setCollideWorldBounds(true);
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        my.sprite.enemy = this.physics.add.sprite(200, 200, "platformer_characters", 'tile_0020.png');
-        
+        my.sprite.enemy = this.physics.add.sprite(550, 200, "platformer_characters", 'tile_0020.png');
+        my.sprite.enemy.anims.play('NPC walk', true);
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.fallLayer, temp);
         this.physics.add.collider(my.sprite.player, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy, this.groundLayer);
 
-        this.gemParticles = this.add.particles(0, 0, 'kenny-particles', {
-            frame: 'magic_03.png',
-            speed: {min: -this.PARTICLE_VELOCITY, max: this.PARTICLE_VELOCITY},
+        this.coinParticle = this.add.particles(0, 0, 'kenny-particles', {
+            frame: 'star_01.png',
+            speed: {min: 100, max: 300},
             lifespan: 800,
-            scale: {start: 0.3, end: 0},
+            scale: {start:0.6, end: 0},
             blendMode: 'ADD',
-            quantity: 1,
+            quantity: 4,
             emitting: false
         });
         // TODO: Add coin collision handler
@@ -142,18 +143,17 @@ class Level1 extends Phaser.Scene {
         this.physics.add.overlap(my.sprite.player, this.gemGroup, (obj1, obj2) => {
             obj2.destroy(); // remove coin on overlap
             this.gemPicked +=1
-            this.gemParticles.setConfig({
-                frame: 'magic_03.png',
+            this.coinParticle.setConfig({
                 x: obj2.x,
                 y: obj2.y,
-
-                speed: {min: -this.PARTICLE_VELOCITY, max: this.PARTICLE_VELOCITY},
-                lifespan: 300,
-                scale: {start: 0.1, end: 0},
+                duration: 10,
+                frame: 'star_01.png',
+                speed: {min: 100, max: 300},
+                lifespan: 800,
+                scale: {start:0.2, end: 0},
                 blendMode: 'ADD',
-                quantity: 1,
-                emitting: true,
-                duration: 5
+                quantity: 4,
+                emitting: true
             });
             this.collectSound.play();
         });

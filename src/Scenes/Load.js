@@ -80,7 +80,7 @@ class Load extends Phaser.Scene {
                 suffix: '.png',
                 zeroPad: 4
             }),
-            frameRate: 15,
+            frameRate: 10,
             repeat: -1
         });
 
