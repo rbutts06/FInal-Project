@@ -146,7 +146,7 @@ class LevelTwo extends Phaser.Scene {
         if(cursors.left.isDown) {
             my.sprite.player.setAccelerationX(-this.ACCELERATION);
             my.sprite.player.resetFlip();
-
+            my.sprite.player.anims.play('walk', true);
 
             if (my.sprite.player.body.blocked.down) {
                 my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
