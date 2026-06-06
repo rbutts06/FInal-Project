@@ -16,6 +16,8 @@ class LevelTwo extends Phaser.Scene {
     create() {
         console.log("create started");
         this.map = this.add.tilemap("HamsterDisasterUpdate", 18, 18, 160, 25);
+        this.jumpSound = this.sound.add("jumping", 1);
+        this.collectSound = this.sound.add("collect", 1);
 
         this.tileset = this.map.addTilesetImage("tilemap_packed", "tilemap_tiles");
         
@@ -101,7 +103,7 @@ class LevelTwo extends Phaser.Scene {
         this.rKey = this.input.keyboard.addKey('R');
         
 
-
+        console.log("PreParticles")
         my.vfx.walking = this.add.particles(0, 0, "kenny-particles", {
             frame: 'magic_05.png',
             scale: {start: 0.03, end: 0.1},
@@ -109,13 +111,14 @@ class LevelTwo extends Phaser.Scene {
             quantity: 2,
             alpha: {start: 1, end: 0.1}, 
         });
-        my.vfx.jumped = this.add.particles(0, 0, "kenny-particles", {
+        my.vfx.jumping = this.add.particles(0, 0, "kenny-particles", {
             frame: 'dirt_01.png',
             scale: {start: 0.03, end: 0},
             lifespan: 600,
             quantity: 2,
             emitting: false
         });
+        console.log("Particles")
 
 
         my.vfx.walking.stop();
@@ -135,7 +138,7 @@ class LevelTwo extends Phaser.Scene {
          null,
          this
          );
-         console.log("create finished");
+    console.log("create finished");
     }
 
     update() {
@@ -184,8 +187,8 @@ class LevelTwo extends Phaser.Scene {
         }
 
         if(!my.sprite.player.body.blocked.down) {
-            my.vfx.jumping.startFollow(my.sprite.player, my.sprite.player.displayWidth/10-2, my.sprite.player.displayHeight/2-5, false);
-            my.vfx.jumping.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+           // my.vfx.jumping.startFollow(my.sprite.player, my.sprite.player.displayWidth/10-2, my.sprite.player.displayHeight/2-5, false);
+           // my.vfx.jumping.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
             my.sprite.player.anims.play('jump');
             my.vfx.jumping.start();
         }else{
@@ -193,6 +196,7 @@ class LevelTwo extends Phaser.Scene {
         }
         if(my.sprite.player.body.blocked.down && Phaser.Input.Keyboard.JustDown(cursors.up)) {
             my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
+            this.jumpSound.play();
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
