@@ -37,7 +37,7 @@ class End extends Phaser.Scene{
         this.physics.add.collider(my.sprite.player, this.endLayer);
 
         this.physics.add.overlap(my.sprite.player, this.snowGroup, (obj1, obj2) => {
-            this.scene.start("platformerScene");
+            this.scene.start("level1Scene");
         });
 
         this.add.text(150,100, "You won! See the snowman to restart!", {

@@ -1,6 +1,6 @@
-class Platformer extends Phaser.Scene {
+class Level1 extends Phaser.Scene {
     constructor() {
-        super("platformerScene");
+        super("level1Scene");
     }
 
     init() {
@@ -12,6 +12,7 @@ class Platformer extends Phaser.Scene {
         this.PARTICLE_VELOCITY = 50;
         this.SCALE = 2.0;
         this.gemPicked = 0;
+        this.key = null;
     }
 
     create() {
@@ -19,10 +20,12 @@ class Platformer extends Phaser.Scene {
         // 120 tiles wide and 25 tiles tall.
         this.spawnX = 30;
         this.spawnY = 300;
-        this.map = this.add.tilemap("PlatformMap", 18, 18, 120, 25);
-        this.background = this.add.tilemap("platformBack", 24, 24, 90, 21);
+        this.map = this.add.tilemap("Level1Map", 18, 18, 150, 25);
+        this.background = this.add.tilemap("lvl1Back", 24, 24, 120, 21);
         this.jumpSound = this.sound.add("jumping", 1);
         this.collectSound = this.sound.add("collect", 1);
+
+        this.key = this.input.keyboard.addKey('E');
 
         // Add a tileset to the map
         // First parameter: name we gave the tileset in Tiled
@@ -34,10 +37,14 @@ class Platformer extends Phaser.Scene {
         this.backLayer = this.background.createLayer("Tile Layer 1", this.tilesetBack, 0, 0);
         this.groundLayer = this.map.createLayer("Ground/platforms", this.tileset, 0, 0);
         this.decorLayer = this.map.createLayer("decor", this.tileset, 0,0);
+        this.fallLayer = this.map.createLayer("falling", this.tileset, 0,0);
         
 
         // Make it collidable
         this.groundLayer.setCollisionByProperty({
+            collides: true
+        });
+        this.fallLayer.setCollisionByProperty({
             collides: true
         });
 
@@ -63,6 +70,20 @@ class Platformer extends Phaser.Scene {
             key: "tilemap_sheet",
             frame: 111
         });
+        this.switch = this.map.createFromObjects("Objects", {
+            name:"switch", 
+            key: "tilemap_sheet",
+            frame: 64
+        });
+        
+        
+        let disappear = (obj1, obj2) => {
+            obj2.visible = false;
+            obj2.setCollision(false);
+        }
+        let temp = (obj1, obj2) => {
+            this.time.delayedCall(500, disappear, [obj1, obj2])
+        }
 
         
 
@@ -73,6 +94,8 @@ class Platformer extends Phaser.Scene {
         this.spikeGroup = this.add.group(this.spikes);
         this.physics.world.enable(this.flags, Phaser.Physics.Arcade.STATIC_BODY);
         this.flagGroup = this.add.group(this.flags, this.flagTop);
+        this.physics.world.enable(this.switch, Phaser.Physics.Arcade.STATIC_BODY);
+        
 
         // set up player avatar
         my.sprite.player = this.physics.add.sprite(this.spawnX, this.spawnY, "platformer_characters", "tile_0005.png");
@@ -80,6 +103,7 @@ class Platformer extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
         // Enable collision handling
+        this.physics.add.collider(my.sprite.player, this.fallLayer, temp);
         this.physics.add.collider(my.sprite.player, this.groundLayer);
 
         this.gemParticles = this.add.particles(0, 0, 'kenny-particles', {
@@ -92,6 +116,18 @@ class Platformer extends Phaser.Scene {
             emitting: false
         });
         // TODO: Add coin collision handler
+        this.physics.add.overlap(my.sprite.player, this.switch, (obj1, obj2) => {
+            if(this.key.isDown){
+                obj2.index = 66;
+                this.fallLayer.forEachTile(tile => {
+                if(tile.index !== -1){
+                    tile.visible = true;
+                    tile.setCollision(true);
+                }
+            });
+            }
+        });
+
 
         this.physics.add.overlap(my.sprite.player, this.gemGroup, (obj1, obj2) => {
             obj2.destroy(); // remove coin on overlap
@@ -111,6 +147,7 @@ class Platformer extends Phaser.Scene {
             });
             this.collectSound.play();
         });
+        
         this.physics.add.overlap(my.sprite.player, this.spikeGroup, (obj1, obj2) => {
             obj1.x = this.spawnX;
             obj1.y = this.spawnY;
@@ -123,7 +160,7 @@ class Platformer extends Phaser.Scene {
             
         })
         this.physics.add.overlap(my.sprite.player, this.flagGroup, (obj1, obj2) => {
-            if(this.gemPicked == 30){
+            if(this.gemPicked == 37){
                 this.scene.start("endScreen");
             }
         })
