@@ -27,6 +27,8 @@ class LevelTwo extends Phaser.Scene {
         this.groundLayer.setCollisionByProperty({
             collides: true
         });
+        this.waterLayer = this.map.createLayer("Water", this.tileset, 0, 0);
+        this.waterLayer.setCollisionByExclusion([-1]);
         this.dangerLayer = this.map.createLayer("Danger", this.tileset, 0, 0);
         this.dangerLayer.setCollisionByExclusion([-1]);
         this.fallingLayer = this.map.createLayer("Fall", this.tileset, 0, 0);
@@ -59,20 +61,9 @@ class LevelTwo extends Phaser.Scene {
         this.waterTiles = this.groundLayer.filterTiles(tile => {
             return tile.properties.isWater == true;
         });
+        console.log(this.waterTiles.length)
         
- //       this.waterTiles.forEach(tile => {
-   //      this.physics.add.overlap(my.sprite.player, tile, (obj1, obj2) => {
-     //       console.log("swimming!");
-       //     this.swimming = true;
-         //});
-        //});
-        
-        let splash = (obj1, obj2) => {
-            console.log("swimming!");
-            this.swimming = true;
-        }
-        this.physics.add.collider(my.sprite.player, this.waterTiles, splash);
-
+       
         
         this.physics.add.collider(my.sprite.player, this.fallingLayer);
        // this.physics.add.collider(my.sprite.player, this.dangerLayer);
@@ -81,7 +72,7 @@ class LevelTwo extends Phaser.Scene {
           my.sprite.player,
           this.endGoal,
           () => {
-            this.scene.start("level1Scene");
+            this.scene.start("level3Scene");
            },
            null,
            this
@@ -156,6 +147,13 @@ class LevelTwo extends Phaser.Scene {
          my.sprite.player,
          this.dangerLayer,
          this.playerDeath,
+         null,
+         this
+         );
+         this.physics.add.collider(
+         my.sprite.player,
+         this.waterLayer,
+         this.swimmingStart,
          null,
          this
          );
@@ -276,7 +274,10 @@ class LevelTwo extends Phaser.Scene {
         }
     }
 }
-
+  swimmingStart(){
+    if (this.swimming) return;
+    this.swimming = true;
+  }
     playerDeath() {
     if (this.isDying) return;
     this.isDying = true;
