@@ -12,6 +12,7 @@ class LevelTwo extends Phaser.Scene {
         this.SWIM_VELOCITY = 100;
         this.PARTICLE_VELOCITY = 50;
         this.SCALE = 2.0;
+        this.gemPicked = 0;
     }
 
     create() {
@@ -53,6 +54,14 @@ class LevelTwo extends Phaser.Scene {
         this.coinGroup = this.add.group(this.coins);
 
         this.swimming = false;
+
+        let disappear = (obj1, obj2) => {
+            obj2.visible = false;
+            obj2.setCollision(false);
+        }
+        let temp = (obj1, obj2) => {
+            this.time.delayedCall(500, disappear, [obj1, obj2])
+        }
        
         my.sprite.player = this.physics.add.sprite(30, 220, "platformer_characters", "tile_0005.png");
         my.sprite.player.setCollideWorldBounds(true);
@@ -65,14 +74,16 @@ class LevelTwo extends Phaser.Scene {
         
        
         
-        this.physics.add.collider(my.sprite.player, this.fallingLayer);
+        this.physics.add.collider(my.sprite.player, this.fallingLayer, temp);
        // this.physics.add.collider(my.sprite.player, this.dangerLayer);
        console.log("player created");
         this.physics.add.collider(
           my.sprite.player,
           this.endGoal,
           () => {
-            this.scene.start("level3Scene");
+            if(this.gemPicked == 49){
+                this.scene.start("level3Scene");
+            }
            },
            null,
            this
@@ -91,7 +102,7 @@ class LevelTwo extends Phaser.Scene {
         });
 
         this.physics.add.overlap(my.sprite.player, this.coinGroup, (obj1, obj2) => {
-            
+            this.gemPicked +=1
             this.coinParticle.setConfig({
             x: obj2.x,
             y: obj2.y,
