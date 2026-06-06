@@ -6,7 +6,7 @@ class Level1 extends Phaser.Scene {
     init() {
         // variables and settings
         this.ACCELERATION = 400;
-        this.DRAG = 10000;    // DRAG < ACCELERATION = icy slide
+        this.DRAG = 1000;    // DRAG < ACCELERATION = icy slide
         this.physics.world.gravity.y = 1500;
         this.JUMP_VELOCITY = -500;
         this.PARTICLE_VELOCITY = 50;
@@ -101,7 +101,7 @@ class Level1 extends Phaser.Scene {
         my.sprite.player = this.physics.add.sprite(this.spawnX, this.spawnY, "platformer_characters", "tile_0005.png");
         my.sprite.player.setCollideWorldBounds(true);
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        my.sprite.enemy = this.physics.add.sprite(550, 200, "platformer_characters", 'tile_0020.png');
+        my.sprite.enemy = new NPC(this, 550, 300, 'tile_0020.png');
         my.sprite.enemy.anims.play('NPC walk', true);
 
         // Enable collision handling
@@ -266,6 +266,39 @@ class Level1 extends Phaser.Scene {
 
         if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
             this.scene.restart();
+        }
+    }
+}
+
+class NPC extends Phaser.Physics.Arcade.Sprite{
+    constructor(scene, x, y){
+        super(scene, x, y);
+
+        scene.add.existing(this);
+        scene.physics.add.existing(this);
+
+        this.setImmovable(true);
+        this.setCollideWorldBounds(true);
+        this.speed = 80;
+        
+        this.movementTimer = scene.time.addEvent({
+            delay: 2000,
+            callback: this.walk,
+            callbackScope: this,
+            loop: true
+        });
+    }
+
+    walk(){
+        const direction = Phaser.Math.Between(1,2);
+
+        switch(direction){
+            case 1: 
+                this.setVelocity(-this.speed, 0);
+                break;
+            case 2:
+                this.setVelocity(this.speed, 0);
+                break;
         }
     }
 }
