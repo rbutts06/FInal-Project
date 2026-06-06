@@ -101,6 +101,8 @@ class Level1 extends Phaser.Scene {
         my.sprite.player = this.physics.add.sprite(this.spawnX, this.spawnY, "platformer_characters", "tile_0005.png");
         my.sprite.player.setCollideWorldBounds(true);
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        my.sprite.enemy = this.physics.add.sprite(200, 200, "platformer_characters", 'tile_0020.png');
+        
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.fallLayer, temp);
@@ -169,7 +171,7 @@ class Level1 extends Phaser.Scene {
         })
         this.physics.add.overlap(my.sprite.player, this.flagGroup, (obj1, obj2) => {
             if(this.gemPicked == 37){
-                this.scene.start("endScreen");
+                this.scene.start("levelTwoScene");
             }
         })
 

@@ -71,6 +71,19 @@ class Load extends Phaser.Scene {
             ],
         });
 
+        this.anims.create({
+            key: 'NPC walk',
+            frames: this.anims.generateFrameNames('platformer_characters', {
+                prefix: 'tile_',
+                start: 20,
+                end: 19,
+                suffix: '.png',
+                zeroPad: 4
+            }),
+            frameRate: 15,
+            repeat: -1
+        });
+
          // ...and pass to the next Scene
          //DO NOT PUSH!!!!!!!!
          //this.scene.start("levelTwoScene");
