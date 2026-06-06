@@ -14,6 +14,7 @@ class Load extends Phaser.Scene {
         this.load.tilemapTiledJSON("Level1Map", "Level1Map.tmj");   // Tilemap in JSON
         this.load.image("background_tilemap", "tilemap-backgrounds_packed.png");
         this.load.tilemapTiledJSON("lvl1Back", "lvl1Back.tmj");
+        this.load.tilemapTiledJSON("HamsterDisasterUpdate", "HamsterDisasterUpdate.tmj");
         this.load.tilemapTiledJSON("endScreen", "endScreen.tmj");
 
         this.load.audio("collect", "collection.mp3");
@@ -70,7 +71,8 @@ class Load extends Phaser.Scene {
         });
 
          // ...and pass to the next Scene
-         this.scene.start("level1Scene");
+         //DO NOT PUSH!!!!!!!!
+         this.scene.start("levelTwoScene");
     }
 
     // Never get here since a new scene is started in create()
