@@ -29,8 +29,8 @@ let config = {
             }
         }
     },
-    width: 1420,
-    height: 900,
+    width: 1515,
+    height: 715,
     backgroundColor: '#5197ed',
     scene: [Load, Level1, LevelTwo, End]
 }
