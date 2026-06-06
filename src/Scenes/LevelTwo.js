@@ -150,21 +150,40 @@ class LevelTwo extends Phaser.Scene {
          null,
          this
          );
-         this.physics.add.collider(
-         my.sprite.player,
-         this.waterLayer,
-         this.swimmingStart,
-         null,
-         this
-         );
+//         this.physics.add.collider(
+  //       my.sprite.player,
+    //     this.waterLayer,
+      //   this.swimmingStart,
+        // null,
+//         this
+  //       );
+       
     console.log("create finished");
     }
 
     update() {
+    this.playerX = my.sprite.player.x;
+    this.playerY = my.sprite.player.y;
+
+    this.tileX = this.groundLayer.worldToTileX(this.playerX);
+    this.tileY = this.groundLayer.worldToTileY(this.playerY);
+
+    this.tile = this.groundLayer.getTileAt(this.tileX, this.tileY);
+
+    if (this.tile) {
+        if (this.tile.properties && this.tile.properties.isWater) {
+            this.swimming = true;
+        } 
+        if (this.tile.properties && !this.tile.properties.isWater) {
+            this.swimming = false;
+        }
+    }
+
         if (this.isDying) {
          return;
         }        
         if (this.swimming == false){
+            this.physics.world.gravity.y = 1500;
         if(cursors.left.isDown) {
             my.sprite.player.setAccelerationX(-this.ACCELERATION);
             my.sprite.player.resetFlip();
