@@ -103,20 +103,20 @@ class LevelTwo extends Phaser.Scene {
 
 
         my.vfx.walking = this.add.particles(0, 0, "kenny-particles", {
-            frame: ['dirt_01.png', 'dirt_02.png'],
+            frame: 'magic_05.png',
             scale: {start: 0.03, end: 0.1},
-            maxAliveParticles: 10,
-            lifespan: 350,
-            gravityY: -400,
+            lifespan: 800,
+            quantity: 2,
             alpha: {start: 1, end: 0.1}, 
+        });
+        my.vfx.jumped = this.add.particles(0, 0, "kenny-particles", {
+            frame: 'dirt_01.png',
+            scale: {start: 0.03, end: 0},
+            lifespan: 600,
+            quantity: 2,
+            emitting: false
         });
 
-        my.vfx.jumping = this.add.particles(0, 0, "kenny-particles", {
-            frame: ['circle_01.png', 'circle_02.png'],
-            scale: {start: 0.03, end: 0.1},
-            lifespan: 300,
-            alpha: {start: 1, end: 0.1}, 
-        });
 
         my.vfx.walking.stop();
         my.vfx.jumping.stop();
