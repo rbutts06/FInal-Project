@@ -373,7 +373,7 @@ class LevelTwo extends Phaser.Scene {
     this.isDying = true;
     my.sprite.player.setVelocity(0, 0);
     my.sprite.player.setAcceleration(0, 0);
-    my.sprite.player.setTint(0xff0000);
+    my.sprite.player.setTint('#ff0000');
     my.sprite.player.body.enable = false;
 
     this.fallingLayer.forEachTile(tile => {
@@ -389,6 +389,7 @@ class LevelTwo extends Phaser.Scene {
         ease: "Power2",
         yoyo: true,
         onComplete: () => {
+            my.sprite.player.setTint('#ffffff');
             if (this.health > 0){
                 this.health -= 1;
                 //console.log(this.health);
