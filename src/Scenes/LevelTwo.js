@@ -96,10 +96,15 @@ class LevelTwo extends Phaser.Scene {
         console.log(this.waterTiles.length)
 
         my.sprite.enemy1 = new NPC(this, 200, 220, 'tile_0020.png');
+        my.sprite.enemy1.body.setSize(10, 10);
         my.sprite.enemy2 = new NPC(this, 730, 170, 'tile_0020.png');
+        my.sprite.enemy2.body.setSize(10, 10);
         my.sprite.enemy3 = new NPC(this, 860, 225, 'tile_0020.png');
+        my.sprite.enemy3.body.setSize(10, 10);
         my.sprite.enemy4 = new NPC(this, 1325, 290, 'tile_0020.png');
+        my.sprite.enemy4.body.setSize(10, 10);
         my.sprite.enemy5 = new NPC(this, 2379, 270, 'tile_0020.png');
+        my.sprite.enemy5.body.setSize(10, 10);
         this.enemyGroup = this.add.group();
         this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2, my.sprite.enemy3, my.sprite.enemy4, my.sprite.enemy5]);
 
