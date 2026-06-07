@@ -24,9 +24,9 @@ class LevelTwo extends Phaser.Scene {
         this.jumpSound = this.sound.add("jumping", 1);
         this.collectSound = this.sound.add("collect", 1);
         this.deathSound = this.sound.add("bang", 1);
-        this.background = this.sound.add("song", 1);
-        this.background.loop = true;
-        this.background.play();
+        this.music = this.sound.add("song", 1);
+        this.music.loop = true;
+        this.music.play();
 
         this.tileset = this.map.addTilesetImage("tilemap_packed", "tilemap_tiles");
         
