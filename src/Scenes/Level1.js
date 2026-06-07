@@ -96,6 +96,11 @@ class Level1 extends Phaser.Scene {
             fontSize: 20,
             color: 0xffffff
         });
+        this.add.text(200, 100, "use the lever to reset the platforms", {
+            fontFamily: "Times, Serif",
+            fontSize: 20,
+            color: 0xffffff
+        });
 
         // TODO: Add turn into Arcade Physics here
         this.physics.world.enable(this.gems, Phaser.Physics.Arcade.STATIC_BODY);
@@ -115,7 +120,7 @@ class Level1 extends Phaser.Scene {
         my.sprite.enemy2 = new NPC(this, 1000, 200, 'tile_0020.png');
         my.sprite.enemy3 = new NPC(this, 1500, 200, 'tile_0020.png');
         my.sprite.enemy4 = new NPC(this, 1650, 200, 'tile_0020.png');
-        my.sprite.enemy5 = new NPC(this, 2200, 200, 'tile_0020.png');
+        my.sprite.enemy5 = new NPC(this, 2300, 200, 'tile_0020.png');
         this.enemyGroup = this.add.group();
         this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2, my.sprite.enemy3, my.sprite.enemy4, my.sprite.enemy5]);
 
@@ -354,7 +359,7 @@ class NPC extends Phaser.Physics.Arcade.Sprite{
 
         this.setImmovable(true);
         this.setCollideWorldBounds(true);
-        this.speed = 80;
+        this.speed = 40;
         this.direction = 1
         this.groundLayer = scene.groundLayer;
         this.setVelocityX(this.speed);

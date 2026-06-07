@@ -145,8 +145,8 @@ class Level3 extends Phaser.Scene{
         my.vfx.swim.stop();
         my.sprite.enemy1 = new NPC(this, 1050, 300, 'tile_0020.png');
         my.sprite.enemy2 = new NPC(this, 270, 300, 'tile_0020.png');
-        my.sprite.enemy3 = new NPC(this, 1800, 200, 'tile_0020.png');
-        my.sprite.enemy4 = new NPC(this, 2000, 200, 'tile_0020.png');
+        my.sprite.enemy3 = new NPC(this, 1800, 250, 'tile_0020.png');
+        my.sprite.enemy4 = new NPC(this, 2200, 200, 'tile_0020.png');
         my.sprite.enemy5 = new NPC(this, 2350, 200, 'tile_0020.png');
         this.physics.add.collider(my.sprite.enemy5, this.groundLayer);
         this.physics.add.collider(my.sprite.enemy3, this.groundLayer);
@@ -401,7 +401,7 @@ class Level3 extends Phaser.Scene{
                 } else if(this.health == 0){
                     this.music.stop();
                     console.log(this.health);
-                    this.scene.restart();
+                    this.scene.start("level1Scene");
                 }
             }
         });
