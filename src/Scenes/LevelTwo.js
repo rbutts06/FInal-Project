@@ -13,7 +13,7 @@ class LevelTwo extends Phaser.Scene {
         this.PARTICLE_VELOCITY = 50;
         this.SCALE = 2.0;
         this.gemPicked = 0;
-        this.health = 4;
+        this.health = 2;
         this.SpawnX = 30;
         this.SpawnY = 220;
     }
@@ -339,7 +339,7 @@ class LevelTwo extends Phaser.Scene {
     my.sprite.player.setVelocity(0, 0);
     my.sprite.player.setAcceleration(0, 0);
     my.sprite.player.setTint(0xff0000);
-    my.sprite.player.input.enabled = false;
+    my.sprite.player.body.enable = false;
 
     this.tweens.add({
         targets: my.sprite.player,
@@ -353,7 +353,7 @@ class LevelTwo extends Phaser.Scene {
                 //console.log(this.health);
                 my.sprite.player.y = this.SpawnY;
                 my.sprite.player.x = this.SpawnX;
-                my.sprite.player.input.enabled = true;
+                my.sprite.player.body.enable = true;
             } else if(this.health == 0){
                 console.log(this.health);
                 this.scene.start("level1Scene");
