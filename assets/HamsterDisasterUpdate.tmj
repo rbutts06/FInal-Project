@@ -872,24 +872,6 @@
          "name":"Text",
          "objects":[
                 {
-                 "height":19,
-                 "id":56,
-                 "name":"text",
-                 "opacity":1,
-                 "rotation":0,
-                 "text":
-                    {
-                     "halign":"center",
-                     "text":"If you die three times, you'll respawn back to level 1!",
-                     "wrap":true
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":400,
-                 "x":396.5,
-                 "y":373.166666666667
-                }, 
-                {
                  "height":57,
                  "id":57,
                  "name":"text",

@@ -405,7 +405,7 @@ class LevelTwo extends Phaser.Scene {
             } else if(this.health == 0){
                 this.music.stop();
                 console.log(this.health);
-                this.scene.start("level1Scene");
+                this.scene.restart();
             }
         }
     });

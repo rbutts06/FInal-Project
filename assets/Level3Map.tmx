@@ -430,8 +430,6 @@
   <object id="67" name="spikes" gid="69" x="1674" y="450" width="18" height="18"/>
   <object id="68" name="spikes" gid="69" x="594" y="360" width="18" height="18"/>
   <object id="69" name="spikes" gid="69" x="612" y="360" width="18" height="18"/>
-  <object id="70" name="spikes" gid="69" x="1818" y="342" width="18" height="18"/>
-  <object id="71" name="spikes" gid="69" x="1836" y="342" width="18" height="18"/>
   <object id="72" name="spikes" gid="69" x="1926" y="306" width="18" height="18"/>
   <object id="73" name="spikes" gid="69" x="2160" y="306" width="18" height="18"/>
   <object id="74" name="spikes" gid="69" x="2178" y="306" width="18" height="18"/>
