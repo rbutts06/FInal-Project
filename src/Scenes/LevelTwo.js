@@ -94,7 +94,25 @@ class LevelTwo extends Phaser.Scene {
             return tile.properties.isWater == true;
         });
         console.log(this.waterTiles.length)
-        
+
+        my.sprite.enemy1 = new NPC(this, 200, 220, 'tile_0020.png');
+        my.sprite.enemy1.body.setSize(10, 10);
+        my.sprite.enemy2 = new NPC(this, 730, 170, 'tile_0020.png');
+        my.sprite.enemy2.body.setSize(10, 10);
+        my.sprite.enemy3 = new NPC(this, 860, 225, 'tile_0020.png');
+        my.sprite.enemy3.body.setSize(10, 10);
+        my.sprite.enemy4 = new NPC(this, 1325, 290, 'tile_0020.png');
+        my.sprite.enemy4.body.setSize(10, 10);
+        my.sprite.enemy5 = new NPC(this, 2379, 270, 'tile_0020.png');
+        my.sprite.enemy5.body.setSize(10, 10);
+        this.enemyGroup = this.add.group();
+        this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2, my.sprite.enemy3, my.sprite.enemy4, my.sprite.enemy5]);
+
+        this.physics.add.collider(my.sprite.enemy1, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy2, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy3, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy4, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy5, this.groundLayer);
        
         
         this.physics.add.collider(my.sprite.player, this.fallingLayer, temp);
@@ -142,7 +160,9 @@ class LevelTwo extends Phaser.Scene {
             this.mySound.play();
         });
 
-        
+        this.physics.add.overlap(my.sprite.player, this.enemyGroup, (obj1, obj2) => {
+            this.playerDeath();
+        });
 
        
         cursors = this.input.keyboard.createCursorKeys();
@@ -166,7 +186,17 @@ class LevelTwo extends Phaser.Scene {
         });
         console.log("Particles")
 
+        my.vfx.swim = this.add.particles(0, 0, "kenny-particles", {
+            frame: 'circle_01.png',
+            scale: {start: 0.003, end: 0.01},
+            blendMode: 'ADD',
+            lifespan: 800,
+            quantity: 2,
+            alpha: {start: 1, end: 0.1}, 
+            tint: '#FFFFFF'
+        });
 
+        my.vfx.swim.stop();
         my.vfx.walking.stop();
         my.vfx.jumping.stop();
 
@@ -189,6 +219,7 @@ class LevelTwo extends Phaser.Scene {
     }
 
     update() {
+
         this.isDying = false;
         this.physics.add.collider(
          my.sprite.player,
@@ -219,6 +250,7 @@ class LevelTwo extends Phaser.Scene {
          return;
         }        
         if (this.swimming == false){
+            my.vfx.swim.stop();
             this.physics.world.gravity.y = 1500;
         if(cursors.left.isDown) {
             my.sprite.player.setAccelerationX(-this.ACCELERATION);
@@ -274,7 +306,9 @@ class LevelTwo extends Phaser.Scene {
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
-            this.scene.restart();
+            //this.scene.restart();
+            console.log(my.sprite.player.x)
+            console.log(my.sprite.player.y)
         }
     }
     if (this.swimming == true){
@@ -286,9 +320,9 @@ class LevelTwo extends Phaser.Scene {
             my.sprite.player.anims.play('walk', true);
 
             //make vfx swimming?
-                my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
-                my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
-                my.vfx.walking.start();
+                my.vfx.swim.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
+                my.vfx.swim.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+                my.vfx.swim.start();
             
             
 
@@ -298,11 +332,9 @@ class LevelTwo extends Phaser.Scene {
             my.sprite.player.anims.play('walk', true);
 
             //make vfx swimming?
-                my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/10-2, my.sprite.player.displayHeight/2-5, false);
-                my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
-                my.vfx.walking.start();
-          
-              my.vfx.walking.stop();
+                my.vfx.swim.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
+                my.vfx.swim.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+                my.vfx.swim.start();
             
             
 
@@ -311,11 +343,13 @@ class LevelTwo extends Phaser.Scene {
             my.sprite.player.setDragX(this.DRAG);
             my.sprite.player.anims.play('idle');
 
-             my.vfx.walking.stop();
+             my.vfx.swim.stop();
         }
 
         if(!my.sprite.player.body.blocked.down) {
-           //bubbles?
+           my.vfx.swim.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
+                my.vfx.swim.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+                my.vfx.swim.start();
         }else{
           //my.vfx.jumping.stop();
         }
@@ -326,6 +360,7 @@ class LevelTwo extends Phaser.Scene {
 
         if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
             this.scene.restart();
+            
         }
     }
 }
@@ -338,8 +373,14 @@ class LevelTwo extends Phaser.Scene {
     this.isDying = true;
     my.sprite.player.setVelocity(0, 0);
     my.sprite.player.setAcceleration(0, 0);
-    my.sprite.player.setTint(0xff0000);
+    my.sprite.player.setTint('#ff0000');
     my.sprite.player.body.enable = false;
+
+    this.fallingLayer.forEachTile(tile => {
+                if(tile.index !== -1){
+                    tile.visible = true;
+                    tile.setCollision(true);
+                }});
 
     this.tweens.add({
         targets: my.sprite.player,
@@ -348,6 +389,7 @@ class LevelTwo extends Phaser.Scene {
         ease: "Power2",
         yoyo: true,
         onComplete: () => {
+            my.sprite.player.setTint('#ffffff');
             if (this.health > 0){
                 this.health -= 1;
                 //console.log(this.health);
@@ -361,4 +403,5 @@ class LevelTwo extends Phaser.Scene {
         }
     });
 }
+
 }
