@@ -823,6 +823,19 @@
                  "width":18,
                  "x":2816.33,
                  "y":439.667
+                }, 
+                {
+                 "gid":65,
+                 "height":18,
+                 "id":61,
+                 "name":"switch",
+                 "opacity":1,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":18,
+                 "x":99.25,
+                 "y":288.75
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -934,7 +947,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":60,
+ "nextobjectid":62,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.12.1",

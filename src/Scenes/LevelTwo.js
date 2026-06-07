@@ -16,6 +16,7 @@ class LevelTwo extends Phaser.Scene {
         this.health = 2;
         this.SpawnX = 30;
         this.SpawnY = 220;
+        this.key = null;
     }
 
     create() {
@@ -28,6 +29,8 @@ class LevelTwo extends Phaser.Scene {
         this.music = this.sound.add("song", 1);
         this.music.loop = true;
         this.music.play();
+
+        this.key = this.input.keyboard.addKey('E');
 
         this.tileset = this.map.addTilesetImage("tilemap_packed", "tilemap_tiles");
         
@@ -56,6 +59,11 @@ class LevelTwo extends Phaser.Scene {
             name: "gems",
             key: "tilemap_sheet",
             frame: 67
+        });
+        this.switch = this.map.createFromObjects("Collect", {
+            name:"switch", 
+            key: "tilemap_sheet",
+            frame: 64
         });
         
         this.textLayer = this.map.getObjectLayer('Text');
@@ -94,6 +102,7 @@ class LevelTwo extends Phaser.Scene {
         my.sprite.player.setCollideWorldBounds(true);
         this.physics.world.setBounds(0,0,this.map.widthInPixels,this.map.heightInPixels);
         this.physics.add.collider(my.sprite.player, this.groundLayer);
+        this.physics.world.enable(this.switch, Phaser.Physics.Arcade.STATIC_BODY);
         this.waterTiles = this.groundLayer.filterTiles(tile => {
             return tile.properties.isWater == true;
         });
@@ -144,6 +153,25 @@ class LevelTwo extends Phaser.Scene {
             blendMode: 'ADD',
             quantity: 4,
             emitting: false
+        });
+
+        this.switch.id = 64;
+        this.physics.add.overlap(my.sprite.player, this.switch, (obj1, obj2) => {
+            if(Phaser.Input.Keyboard.JustDown(this.key)){
+                if(obj2.id == 64){
+                    obj2.setFrame(66);
+                    obj2.id = 66;
+                }
+                else{
+                    obj2.setFrame(64);
+                    obj2.id = 64;
+                }
+                this.fallingLayer.forEachTile(tile => {
+                if(tile.index !== -1){
+                    tile.visible = true;
+                    tile.setCollision(true);
+                }});
+            }
         });
 
         this.physics.add.overlap(my.sprite.player, this.coinGroup, (obj1, obj2) => {
@@ -381,12 +409,6 @@ class LevelTwo extends Phaser.Scene {
     my.sprite.player.setTint('#ff0000');
     my.sprite.player.body.enable = false;
 
-    this.fallingLayer.forEachTile(tile => {
-                if(tile.index !== -1){
-                    tile.visible = true;
-                    tile.setCollision(true);
-                }});
-
     this.tweens.add({
         targets: my.sprite.player,
         y: "-=80",
@@ -405,7 +427,7 @@ class LevelTwo extends Phaser.Scene {
             } else if(this.health == 0){
                 this.music.stop();
                 console.log(this.health);
-                this.scene.restart();
+                this.scene.start("level1Scene");
             }
         }
     });
