@@ -8,5 +8,10 @@ class UIScene extends Phaser.Scene{
             fontSize: 30,
             color: 0xffffff
         });
+        this.game.events.on('updateLives', this.updateLifeText, this);
+    }
+    updateLifeText(health){
+        health = health +1;
+        this.healthText.setText(`Lives: ${health}`);
     }
 }

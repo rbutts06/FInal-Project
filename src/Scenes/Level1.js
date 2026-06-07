@@ -328,6 +328,7 @@ class Level1 extends Phaser.Scene {
                 my.sprite.player.setTint('#ffffff');
                 if (this.health > 0){
                     this.health -= 1;
+                    this.game.events.emit('updateLives', this.health);
                     console.log(this.health);
                     //my.sprite.player.y = this.SpawnY;
                     //my.sprite.player.x = this.SpawnX;
