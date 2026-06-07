@@ -12,6 +12,7 @@ class Level1 extends Phaser.Scene {
         this.PARTICLE_VELOCITY = 50;
         this.SCALE = 2.0;
         this.gemPicked = 0;
+        this.health = 2;
         this.key = null;
     }
 
@@ -148,13 +149,15 @@ class Level1 extends Phaser.Scene {
             }
         });
         this.physics.add.overlap(my.sprite.player, this.enemyGroup, (obj1, obj2) => {
-            obj1.x = this.spawnX;
-            obj1.y = this.spawnY;
+           
             my.sprite.player.setAccelerationX(0);
             my.sprite.player.setDragX(this.DRAG);
             my.sprite.player.anims.play('idle');
             // TODO: have the vfx stop playing
             my.vfx.walking.stop();
+            this.playerDeath();
+            obj1.x = this.spawnX;
+            obj1.y = this.spawnY;
         });
 
 
@@ -177,13 +180,14 @@ class Level1 extends Phaser.Scene {
         });
         
         this.physics.add.overlap(my.sprite.player, this.spikeGroup, (obj1, obj2) => {
-            obj1.x = this.spawnX;
-            obj1.y = this.spawnY;
             my.sprite.player.setAccelerationX(0);
             my.sprite.player.setDragX(this.DRAG);
             my.sprite.player.anims.play('idle');
             // TODO: have the vfx stop playing
             my.vfx.walking.stop();
+            this.playerDeath();
+            obj1.x = this.spawnX;
+            obj1.y = this.spawnY;
             
             
         })
@@ -229,6 +233,14 @@ class Level1 extends Phaser.Scene {
     }
 
     update() {
+        this.isDying = false;
+        this.physics.add.collider(
+         my.sprite.player,
+         this.dangerLayer,
+         this.playerDeath,
+         null,
+         this
+         );
         if(cursors.left.isDown) {
             my.sprite.player.setAccelerationX(-this.ACCELERATION);
             my.sprite.player.resetFlip();
@@ -285,6 +297,37 @@ class Level1 extends Phaser.Scene {
         if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
             this.scene.restart();
         }
+    }
+    playerDeath() {
+        if (this.isDying) return;
+        this.isDying = true;
+        my.sprite.player.setVelocity(0, 0);
+        my.sprite.player.setAcceleration(0, 0);
+        my.sprite.player.setTint('#ff0000');
+        my.sprite.player.body.enable = false;
+
+        
+
+        this.tweens.add({
+            targets: my.sprite.player,
+            y: "-=80",
+            duration: 400,
+            ease: "Power2",
+            yoyo: true,
+            onComplete: () => {
+                my.sprite.player.setTint('#ffffff');
+                if (this.health > 0){
+                    this.health -= 1;
+                    console.log(this.health);
+                    //my.sprite.player.y = this.SpawnY;
+                    //my.sprite.player.x = this.SpawnX;
+                    my.sprite.player.body.enable = true;
+                } else if(this.health == 0){
+                    console.log(this.health);
+                    this.scene.restart();
+                }
+            }
+        });
     }
 }
 
