@@ -157,7 +157,7 @@ class LevelTwo extends Phaser.Scene {
             emitting: true
             });
             obj2.destroy();
-            this.mySound.play();
+            this.collectSound.play();
         });
 
         this.physics.add.overlap(my.sprite.player, this.enemyGroup, (obj1, obj2) => {
