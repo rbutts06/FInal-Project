@@ -334,6 +334,7 @@ class Level1 extends Phaser.Scene {
                     //my.sprite.player.x = this.SpawnX;
                     my.sprite.player.body.enable = true;
                 } else if(this.health == 0){
+                    this.music.stop();
                     console.log(this.health);
                     this.scene.restart();
                 }
