@@ -23,6 +23,7 @@ class LevelTwo extends Phaser.Scene {
         this.map = this.add.tilemap("HamsterDisasterUpdate", 18, 18, 160, 25);
         this.jumpSound = this.sound.add("jumping", 1);
         this.collectSound = this.sound.add("collect", 1);
+        this.deathSound = this.sound.add("bang", 1);
         this.background = this.sound.add("song", 1);
         this.background.loop = true;
         this.background.play();
@@ -373,6 +374,7 @@ class LevelTwo extends Phaser.Scene {
     playerDeath() {
     if (this.isDying) return;
     this.isDying = true;
+    this.deathSound.play();
     my.sprite.player.setVelocity(0, 0);
     my.sprite.player.setAcceleration(0, 0);
     my.sprite.player.setTint('#ff0000');
