@@ -23,6 +23,10 @@ class Level3 extends Phaser.Scene{
         //this.tilesetBack = this.background.addTilesetImage("kenny_background_tiles", "background_tilemap");
         this.jumpSound = this.sound.add("jumping", 1);
         this.collectSound = this.sound.add("collect", 1);
+        this.deathSound = this.sound.add("bang", 1);
+        this.background = this.sound.add("song", 1);
+        this.background.loop = true;
+        this.background.play();
 
         this.groundLayer = this.map.createLayer("Ground/Platforms", this.tileset, 0, 0);
         this.decorLayer = this.map.createLayer("Decor", this.tileset, 0, 0);
@@ -166,6 +170,7 @@ class Level3 extends Phaser.Scene{
         this.physics.add.overlap(my.sprite.player, this.spikeGroup, (obj1, obj2) => {
             obj1.x = this.spawnX;
             obj1.y = this.spawnY;
+            this.deathSound.play();
             my.sprite.player.setAccelerationX(0);
             my.sprite.player.setDragX(this.DRAG);
             my.sprite.player.anims.play('idle');
