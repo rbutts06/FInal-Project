@@ -93,7 +93,7 @@ class LevelTwo extends Phaser.Scene {
         this.waterTiles = this.groundLayer.filterTiles(tile => {
             return tile.properties.isWater == true;
         });
-        console.log(this.waterTiles.length)
+        //console.log(this.waterTiles.length)
 
         my.sprite.enemy1 = new NPC(this, 200, 220, 'tile_0020.png');
         my.sprite.enemy1.body.setSize(10, 10);

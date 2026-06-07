@@ -7,10 +7,12 @@ class Level3 extends Phaser.Scene{
         this.DRAG = 1000;    // DRAG < ACCELERATION = icy slide
         this.physics.world.gravity.y = 1500;
         this.JUMP_VELOCITY = -500;
+        this.SWIM_VELOCITY = 100;
         this.PARTICLE_VELOCITY = 50;
         this.SCALE = 2.0;
         this.gemPicked = 0;
         this.key = null;
+        this.swimming = false;
     } 
     create(){
         this.key = this.input.keyboard.addKey('E');
@@ -25,6 +27,17 @@ class Level3 extends Phaser.Scene{
         this.groundLayer = this.map.createLayer("Ground/Platforms", this.tileset, 0, 0);
         this.decorLayer = this.map.createLayer("Decor", this.tileset, 0, 0);
         this.fallLayer = this.map.createLayer("fall", this.tileset, 0,0);
+
+        this.invisibleTiles = this.groundLayer.filterTiles(tile => {
+            return tile.properties.invisible == true;
+        });
+        this.waterTiles = this.groundLayer.filterTiles(tile => {
+            return tile.properties.isWater == true;
+        });
+
+        this.invisibleTiles.forEach(tile => {
+            tile.visible = false;
+        });
 
         this.groundLayer.setCollisionByProperty({
             collides: true
@@ -112,6 +125,18 @@ class Level3 extends Phaser.Scene{
         });
 
         my.vfx.walking.stop();
+
+        my.vfx.swim = this.add.particles(0, 0, "kenny-particles", {
+            frame: 'circle_01.png',
+            scale: {start: 0.003, end: 0.01},
+            blendMode: 'ADD',
+            lifespan: 800,
+            quantity: 2,
+            alpha: {start: 1, end: 0.1}, 
+            tint: '#FFFFFF'
+        });
+
+        my.vfx.swim.stop();
         
 
         // TODO: add camera code here
@@ -189,6 +214,26 @@ class Level3 extends Phaser.Scene{
 
     }
     update(){
+    this.playerX = my.sprite.player.x;
+    this.playerY = my.sprite.player.y;
+
+    this.tileX = this.groundLayer.worldToTileX(this.playerX);
+    this.tileY = this.groundLayer.worldToTileY(this.playerY);
+
+    this.tile = this.groundLayer.getTileAt(this.tileX, this.tileY);
+
+    if (this.tile) {
+        if (this.tile.properties && this.tile.properties.isWater) {
+            this.swimming = true;
+        } 
+        if (this.tile.properties && !this.tile.properties.isWater) {
+            this.swimming = false;
+        }
+    }
+
+        if (this.swimming == false){
+            my.vfx.swim.stop();
+            this.physics.world.gravity.y = 1500;
         if(cursors.left.isDown) {
             my.sprite.player.setAccelerationX(-this.ACCELERATION);
             my.sprite.player.resetFlip();
@@ -245,5 +290,58 @@ class Level3 extends Phaser.Scene{
         if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
             this.scene.restart();
         }
+     } else if(this.swimming == true){
+        my.vfx.walking.stop();
+         my.sprite.player.tint = 0x0000FF;
+        this.physics.world.gravity.y = 500;
+        if(cursors.left.isDown) {
+            my.sprite.player.setAccelerationX(-this.SWIM_VELOCITY);
+            my.sprite.player.resetFlip();
+            my.sprite.player.anims.play('walk', true);
+
+            //make vfx swimming?
+                my.vfx.swim.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
+                my.vfx.swim.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+                my.vfx.swim.start();
+            
+            
+
+        } else if(cursors.right.isDown) {
+            my.sprite.player.setAccelerationX(this.SWIM_VELOCITY);
+            my.sprite.player.setFlip(true, false);
+            my.sprite.player.anims.play('walk', true);
+
+            //make vfx swimming?
+                my.vfx.swim.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
+                my.vfx.swim.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+                my.vfx.swim.start();
+            
+            
+
+        } else {
+            my.sprite.player.setAccelerationX(0);
+            my.sprite.player.setDragX(this.DRAG);
+            my.sprite.player.anims.play('idle');
+
+             my.vfx.swim.stop();
+        }
+
+        if(!my.sprite.player.body.blocked.down) {
+           my.vfx.swim.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
+                my.vfx.swim.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+                my.vfx.swim.start();
+        }else{
+          //my.vfx.jumping.stop();
+        }
+        if(cursors.up.isDown) {
+            my.sprite.player.body.setVelocityY(-this.SWIM_VELOCITY);
+            my.sprite.player.anims.play('walk', true);
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
+            this.scene.restart();
+            
+        }
+     }
     }
 }
