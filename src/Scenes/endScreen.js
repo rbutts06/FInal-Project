@@ -12,6 +12,9 @@ class End extends Phaser.Scene{
         this.SCALE = 2.0;
     }
     create(){
+        this.background = this.sound.add("song", 1);
+        this.background.loop = true;
+        this.background.play();
         this.spawnX = 400;
         this.spawnY = 200;
         this.end = this.add.tilemap("endScreen", 18, 18, 40, 25);
