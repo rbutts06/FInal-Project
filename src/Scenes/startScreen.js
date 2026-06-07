@@ -28,6 +28,17 @@ class Start extends Phaser.Scene{
         this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(this.SCALE);
+
+
+        //text "press E to start"
+        this.add.text(150,200, "Flag-Man", {
+            fontFamily: "Times, Serif",
+            fontSize: 30
+        });
+        this.add.text(150, 250, "press e to start", {
+            fontFamily: "Times, Serif",
+            fontSize: 20
+        });
     }
     update(){
         if(Phaser.Input.Keyboard.JustDown(this.key)){
