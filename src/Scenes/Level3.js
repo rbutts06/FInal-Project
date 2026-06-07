@@ -174,6 +174,19 @@ class Level3 extends Phaser.Scene{
             }
         });
 
+        my.sprite.enemy1 = new NPC(this, 1050, 300, 'tile_0020.png');
+        my.sprite.enemy2 = new NPC(this, 650, 300, 'tile_0020.png');
+        this.physics.add.collider(my.sprite.enemy1, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy2, this.groundLayer);
+        this.enemyGroup = this.add.group();
+        this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2]);
+        this.enemyGroup = this.physics.add.group({
+            classType: NPC,
+            runChildUpdate: true
+        });
+        
+
+
     }
     update(){
         if(cursors.left.isDown) {

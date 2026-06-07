@@ -108,7 +108,6 @@ class Level1 extends Phaser.Scene {
         my.sprite.enemy5 = new NPC(this, 2200, 200, 'tile_0020.png');
         this.enemyGroup = this.add.group();
         this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2, my.sprite.enemy3, my.sprite.enemy4, my.sprite.enemy5]);
-        
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.fallLayer, temp);
@@ -292,7 +291,7 @@ class Level1 extends Phaser.Scene {
 class NPC extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y){
         super(scene, x, y);
-
+        console.log("making npc");
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
@@ -301,29 +300,48 @@ class NPC extends Phaser.Physics.Arcade.Sprite{
         this.setImmovable(true);
         this.setCollideWorldBounds(true);
         this.speed = 80;
+        this.direction = 1
+        this.groundLayer = scene.groundLayer;
+        this.setVelocityX(this.speed);
+        this.turn();
+    }
+    preUpdate(time, delta){
+        super.preUpdate(time, delta);
+        if(this.body.blocked.down){
+            let checkX = this.x;
+            if(this.direction == 1){
+                checkX +=(this.width/2) + 4;
+            }
+            else{
+                checkX -= (this.width/2)+4;
+            }
+            let checkY = this.y +(this.height/2)+4;
+            let tile = this.groundLayer.getTileAtWorldXY(checkX, checkY);
+            if(!tile){
+                this.turn();
+            }
+        }
+        if(this.body.blocked.left){
+            this.turn();
+        }
+        if(this.body.blocked.right){
+            this.turn();
+        }
         
-        this.movementTimer = scene.time.addEvent({
-            delay: 1000,
-            callback: this.walk,
-            callbackScope: this,
-            loop: true
-        });
     }
 
-    walk(){
-        const direction = Phaser.Math.Between(1,2);
-        this.resetFlip();
-
-        switch(direction){
-            case 1: 
-                this.setVelocity(-this.speed, 0);
-                this.anims.play('NPC walk', true);
-                break;
-            case 2:
-                this.setVelocity(this.speed, 0);
-                this.anims.play('NPC walk', true);
-                this.setFlip(true);
-                break;
+    turn(){
+        this.direction *= -1;
+        if(this.direction == -1){
+            this.setVelocityX(-this.speed);
+            this.anims.play('NPC walk');
+            this.resetFlip();
         }
+        else{
+            this.setVelocityX(this.speed);
+            this.setFlip(true);
+            this.anims.play('NPC walk');
+        }
+        
     }
 }
