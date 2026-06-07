@@ -12,6 +12,7 @@ class Level3 extends Phaser.Scene{
         this.SCALE = 2.0;
         this.gemPicked = 0;
         this.key = null;
+        this.health = 2;
         this.swimming = false;
     } 
     create(){
@@ -142,6 +143,27 @@ class Level3 extends Phaser.Scene{
         });
 
         my.vfx.swim.stop();
+        my.sprite.enemy1 = new NPC(this, 1050, 300, 'tile_0020.png');
+        my.sprite.enemy2 = new NPC(this, 270, 300, 'tile_0020.png');
+        my.sprite.enemy3 = new NPC(this, 1800, 200, 'tile_0020.png');
+        my.sprite.enemy4 = new NPC(this, 2000, 200, 'tile_0020.png');
+        my.sprite.enemy5 = new NPC(this, 2350, 200, 'tile_0020.png');
+        this.physics.add.collider(my.sprite.enemy5, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy3, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy1, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy2, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy4, this.groundLayer);
+        this.enemyGroup = this.add.group();
+        this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2, my.sprite.enemy3, my.sprite.enemy4, my.sprite.enemy5]);
+        this.physics.add.overlap(my.sprite.player, this.enemyGroup, (obj1, obj2) => {
+           this.playerDeath();
+           obj1.x = this.spawnX;
+           obj1.y = this.spawnY;
+        });
+        this.enemyGroup = this.physics.add.group({
+            classType: NPC,
+            runChildUpdate: true
+        });
         
 
         // TODO: add camera code here
@@ -205,33 +227,7 @@ class Level3 extends Phaser.Scene{
             }
         });
 
-        my.sprite.enemy1 = new NPC(this, 1050, 300, 'tile_0020.png');
-        my.sprite.enemy2 = new NPC(this, 270, 300, 'tile_0020.png');
-        my.sprite.enemy3 = new NPC(this, 1800, 200, 'tile_0020.png');
-        my.sprite.enemy4 = new NPC(this, 2000, 200, 'tile_0020.png');
-        my.sprite.enemy5 = new NPC(this, 2350, 200, 'tile_0020.png');
-        this.physics.add.collider(my.sprite.enemy5, this.groundLayer);
-        this.physics.add.collider(my.sprite.enemy3, this.groundLayer);
-        this.physics.add.collider(my.sprite.enemy1, this.groundLayer);
-        this.physics.add.collider(my.sprite.enemy2, this.groundLayer);
-        this.physics.add.collider(my.sprite.enemy4, this.groundLayer);
-        this.enemyGroup = this.add.group();
-        this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2, my.sprite.enemy3, my.sprite.enemy4, my.sprite.enemy5]);
-        this.enemyGroup = this.physics.add.group({
-            classType: NPC,
-            runChildUpdate: true
-        });
-        this.physics.add.overlap(my.sprite.player, this.enemyGroup, (obj1, obj2) => {
-           
-            my.sprite.player.setAccelerationX(0);
-            my.sprite.player.setDragX(this.DRAG);
-            my.sprite.player.anims.play('idle');
-            // TODO: have the vfx stop playing
-            my.vfx.walking.stop();
-            this.playerDeath();
-            obj1.x = this.spawnX;
-            obj1.y = this.spawnY;
-        });
+        
 
         
 
