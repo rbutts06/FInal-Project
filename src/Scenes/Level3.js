@@ -4,14 +4,16 @@ class Level3 extends Phaser.Scene{
     }
     init(){
         this.ACCELERATION = 400;
-        this.DRAG = 10000;    // DRAG < ACCELERATION = icy slide
+        this.DRAG = 1000;    // DRAG < ACCELERATION = icy slide
         this.physics.world.gravity.y = 1500;
         this.JUMP_VELOCITY = -500;
         this.PARTICLE_VELOCITY = 50;
         this.SCALE = 2.0;
         this.gemPicked = 0;
+        this.key = null;
     } 
     create(){
+        this.key = this.input.keyboard.addKey('E');
         this.spawnX = 30;
         this.spawnY = 200;
         this.map = this.add.tilemap("Level3Map", 18, 18, 150, 25);
@@ -22,8 +24,12 @@ class Level3 extends Phaser.Scene{
 
         this.groundLayer = this.map.createLayer("Ground/Platforms", this.tileset, 0, 0);
         this.decorLayer = this.map.createLayer("Decor", this.tileset, 0, 0);
+        this.fallLayer = this.map.createLayer("fall", this.tileset, 0,0);
 
         this.groundLayer.setCollisionByProperty({
+            collides: true
+        });
+        this.fallLayer.setCollisionByProperty({
             collides: true
         });
 
@@ -65,6 +71,15 @@ class Level3 extends Phaser.Scene{
         my.sprite.player = this.physics.add.sprite(this.spawnX, this.spawnY, "platformer_characters", "tile_0005.png");
         my.sprite.player.setCollideWorldBounds(true);
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
+        let disappear = (obj1, obj2) => {
+            obj2.visible = false;
+            obj2.setCollision(false);
+        }
+        let temp = (obj1, obj2) => {
+            this.time.delayedCall(500, disappear, [obj1, obj2])
+        }
+        this.physics.add.collider(my.sprite.player, this.fallLayer, temp);
         this.physics.add.collider(my.sprite.player, this.groundLayer);
 
         this.coinParticle = this.add.particles(0, 0, 'kenny-particles', {
@@ -135,10 +150,30 @@ class Level3 extends Phaser.Scene{
             
         })
         this.physics.add.overlap(my.sprite.player, this.flagGroup, (obj1, obj2) => {
-            if(this.gemPicked == 37){
+            if(this.gemPicked == 35){
                 this.scene.start("endScreen");
             }
         })
+        this.switch.id = 64;
+        this.physics.add.overlap(my.sprite.player, this.switch, (obj1, obj2) => {
+            if(Phaser.Input.Keyboard.JustDown(this.key)){
+                if(obj2.id == 64){
+                    obj2.setFrame(66);
+                    obj2.id = 66;
+                }
+                else{
+                    obj2.setFrame(64);
+                    obj2.id = 64;
+                }
+                this.fallLayer.forEachTile(tile => {
+                if(tile.index !== -1){
+                    tile.visible = true;
+                    tile.setCollision(true);
+                }
+            });
+            }
+        });
+
     }
     update(){
         if(cursors.left.isDown) {
