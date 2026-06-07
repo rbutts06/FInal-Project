@@ -45,6 +45,7 @@ class Start extends Phaser.Scene{
     }
     update(){
         if(Phaser.Input.Keyboard.JustDown(this.key)){
+            this.music.stop();
             this.scene.start("level1Scene");
         }
     }
