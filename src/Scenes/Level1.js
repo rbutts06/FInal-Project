@@ -101,13 +101,23 @@ class Level1 extends Phaser.Scene {
         my.sprite.player = this.physics.add.sprite(this.spawnX, this.spawnY, "platformer_characters", "tile_0005.png");
         my.sprite.player.setCollideWorldBounds(true);
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        my.sprite.enemy = new NPC(this, 550, 300, 'tile_0020.png');
-        my.sprite.enemy.anims.play('NPC walk', true);
+        my.sprite.enemy1 = new NPC(this, 550, 300, 'tile_0020.png');
+        my.sprite.enemy2 = new NPC(this, 1000, 200, 'tile_0020.png');
+        my.sprite.enemy3 = new NPC(this, 1500, 200, 'tile_0020.png');
+        my.sprite.enemy4 = new NPC(this, 1650, 200, 'tile_0020.png');
+        my.sprite.enemy5 = new NPC(this, 2200, 200, 'tile_0020.png');
+        this.enemyGroup = this.add.group();
+        this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2, my.sprite.enemy3, my.sprite.enemy4, my.sprite.enemy5]);
+        
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.fallLayer, temp);
         this.physics.add.collider(my.sprite.player, this.groundLayer);
-        this.physics.add.collider(my.sprite.enemy, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy1, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy2, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy3, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy4, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy5, this.groundLayer);
 
         this.coinParticle = this.add.particles(0, 0, 'kenny-particles', {
             frame: 'star_01.png',
@@ -137,6 +147,15 @@ class Level1 extends Phaser.Scene {
                 }
             });
             }
+        });
+        this.physics.add.overlap(my.sprite.player, this.enemyGroup, (obj1, obj2) => {
+            obj1.x = this.spawnX;
+            obj1.y = this.spawnY;
+            my.sprite.player.setAccelerationX(0);
+            my.sprite.player.setDragX(this.DRAG);
+            my.sprite.player.anims.play('idle');
+            // TODO: have the vfx stop playing
+            my.vfx.walking.stop();
         });
 
 
@@ -277,12 +296,14 @@ class NPC extends Phaser.Physics.Arcade.Sprite{
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
+        this.setOffset(0,-10);
+
         this.setImmovable(true);
         this.setCollideWorldBounds(true);
         this.speed = 80;
         
         this.movementTimer = scene.time.addEvent({
-            delay: 2000,
+            delay: 1000,
             callback: this.walk,
             callbackScope: this,
             loop: true
@@ -291,13 +312,17 @@ class NPC extends Phaser.Physics.Arcade.Sprite{
 
     walk(){
         const direction = Phaser.Math.Between(1,2);
+        this.resetFlip();
 
         switch(direction){
             case 1: 
                 this.setVelocity(-this.speed, 0);
+                this.anims.play('NPC walk', true);
                 break;
             case 2:
                 this.setVelocity(this.speed, 0);
+                this.anims.play('NPC walk', true);
+                this.setFlip(true);
                 break;
         }
     }
