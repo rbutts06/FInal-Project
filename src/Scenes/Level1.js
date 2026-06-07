@@ -86,7 +86,11 @@ class Level1 extends Phaser.Scene {
             this.time.delayedCall(500, disappear, [obj1, obj2])
         }
 
-        
+        this.add.text(50, 250, "use e to use the lever", {
+            fontFamily: "Times, Serif",
+            fontSize: 20,
+            color: 0xffffff
+        });
 
         // TODO: Add turn into Arcade Physics here
         this.physics.world.enable(this.gems, Phaser.Physics.Arcade.STATIC_BODY);
