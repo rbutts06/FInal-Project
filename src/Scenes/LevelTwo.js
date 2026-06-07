@@ -23,6 +23,9 @@ class LevelTwo extends Phaser.Scene {
         this.map = this.add.tilemap("HamsterDisasterUpdate", 18, 18, 160, 25);
         this.jumpSound = this.sound.add("jumping", 1);
         this.collectSound = this.sound.add("collect", 1);
+        this.background = this.sound.add("song", 1);
+        this.background.loop = true;
+        this.background.play();
 
         this.tileset = this.map.addTilesetImage("tilemap_packed", "tilemap_tiles");
         
@@ -45,8 +48,7 @@ class LevelTwo extends Phaser.Scene {
             collides: true
            });    
         
-           //This should make is so that when the player touches the goal layer, the end screen is triggered by a statement in update.
-        this.mySound = this.sound.add("bang", 1);
+        
 
         this.coins = this.map.createFromObjects("Collect", {
             name: "gems",
