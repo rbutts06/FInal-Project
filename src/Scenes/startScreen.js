@@ -12,9 +12,9 @@ class Start extends Phaser.Scene{
         this.SCALE = 2.0;
     }
     create(){
-        this.background = this.sound.add("song", 1);
-        this.background.loop = true;
-        this.background.play();
+        this.music = this.sound.add("song", 1);
+        this.music.loop = true;
+        this.music.play();
         this.key = this.input.keyboard.addKey('E');
         this.end = this.add.tilemap("startScreen", 18, 18, 40, 25);
         this.tiles = this.end.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
