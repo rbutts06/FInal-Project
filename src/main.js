@@ -32,7 +32,7 @@ let config = {
     width: 1515,
     height: 715,
     backgroundColor: '#5197ed',
-    scene: [Load, Level1, LevelTwo, Level3, End]
+    scene: [Load, Start, Level1, LevelTwo, Level3, End]
 }
 
 var cursors;

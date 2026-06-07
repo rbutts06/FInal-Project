@@ -17,6 +17,7 @@ class Load extends Phaser.Scene {
         this.load.tilemapTiledJSON("HamsterDisasterUpdate", "HamsterDisasterUpdate.tmj");
         this.load.tilemapTiledJSON("endScreen", "endScreen.tmj");
         this.load.tilemapTiledJSON("Level3Map", "Level3Map.tmj");
+        this.load.tilemapTiledJSON("startScreen", "startScreen.tmj");
 
         this.load.audio("collect", "collection.mp3");
         this.load.audio("jumping", "jumper.mp3");
@@ -89,7 +90,7 @@ class Load extends Phaser.Scene {
          //DO NOT PUSH!!!!!!!!
          //this.scene.start("level3Scene");
          //this.scene.start("levelTwoScene");
-         this.scene.start("level1Scene");
+         this.scene.start("startScreen");
     }
 
     // Never get here since a new scene is started in create()
