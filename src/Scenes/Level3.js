@@ -169,14 +169,14 @@ class Level3 extends Phaser.Scene{
         });
         
         this.physics.add.overlap(my.sprite.player, this.spikeGroup, (obj1, obj2) => {
-            obj1.x = this.spawnX;
-            obj1.y = this.spawnY;
-            this.deathSound.play();
             my.sprite.player.setAccelerationX(0);
             my.sprite.player.setDragX(this.DRAG);
             my.sprite.player.anims.play('idle');
             // TODO: have the vfx stop playing
             my.vfx.walking.stop();
+            this.playerDeath();
+            obj1.x = this.spawnX;
+            obj1.y = this.spawnY;
             
             
         })
@@ -206,20 +206,46 @@ class Level3 extends Phaser.Scene{
         });
 
         my.sprite.enemy1 = new NPC(this, 1050, 300, 'tile_0020.png');
-        my.sprite.enemy2 = new NPC(this, 650, 300, 'tile_0020.png');
+        my.sprite.enemy2 = new NPC(this, 270, 300, 'tile_0020.png');
+        my.sprite.enemy3 = new NPC(this, 1800, 200, 'tile_0020.png');
+        my.sprite.enemy4 = new NPC(this, 2000, 200, 'tile_0020.png');
+        my.sprite.enemy5 = new NPC(this, 2350, 200, 'tile_0020.png');
+        this.physics.add.collider(my.sprite.enemy5, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy3, this.groundLayer);
         this.physics.add.collider(my.sprite.enemy1, this.groundLayer);
         this.physics.add.collider(my.sprite.enemy2, this.groundLayer);
+        this.physics.add.collider(my.sprite.enemy4, this.groundLayer);
         this.enemyGroup = this.add.group();
-        this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2]);
+        this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2, my.sprite.enemy3, my.sprite.enemy4, my.sprite.enemy5]);
         this.enemyGroup = this.physics.add.group({
             classType: NPC,
             runChildUpdate: true
         });
+        this.physics.add.overlap(my.sprite.player, this.enemyGroup, (obj1, obj2) => {
+           
+            my.sprite.player.setAccelerationX(0);
+            my.sprite.player.setDragX(this.DRAG);
+            my.sprite.player.anims.play('idle');
+            // TODO: have the vfx stop playing
+            my.vfx.walking.stop();
+            this.playerDeath();
+            obj1.x = this.spawnX;
+            obj1.y = this.spawnY;
+        });
+
         
 
 
     }
     update(){
+    this.isDying = false;
+        this.physics.add.collider(
+         my.sprite.player,
+         this.dangerLayer,
+         this.playerDeath,
+         null,
+         this
+         );
     this.playerX = my.sprite.player.x;
     this.playerY = my.sprite.player.y;
 
@@ -349,5 +375,39 @@ class Level3 extends Phaser.Scene{
             
         }
      }
+    }
+    playerDeath() {
+        if (this.isDying) return;
+        this.isDying = true;
+        this.deathSound.play();
+        my.sprite.player.setVelocity(0, 0);
+        my.sprite.player.setAcceleration(0, 0);
+        my.sprite.player.setTint('#ff0000');
+        my.sprite.player.body.enable = false;
+
+        
+
+        this.tweens.add({
+            targets: my.sprite.player,
+            y: "-=80",
+            duration: 400,
+            ease: "Power2",
+            yoyo: true,
+            onComplete: () => {
+                my.sprite.player.setTint('#ffffff');
+                if (this.health > 0){
+                    this.health -= 1;
+                    this.game.events.emit('updateLives', this.health);
+                    console.log(this.health);
+                    //my.sprite.player.y = this.SpawnY;
+                    //my.sprite.player.x = this.SpawnX;
+                    my.sprite.player.body.enable = true;
+                } else if(this.health == 0){
+                    this.music.stop();
+                    console.log(this.health);
+                    this.scene.restart();
+                }
+            }
+        });
     }
 }
