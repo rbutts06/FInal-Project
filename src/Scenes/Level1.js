@@ -19,6 +19,7 @@ class Level1 extends Phaser.Scene {
     create() {
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 120 tiles wide and 25 tiles tall.
+        this.scene.launch('UIScene');
         this.spawnX = 30;
         this.spawnY = 300;
         this.map = this.add.tilemap("Level1Map", 18, 18, 150, 25);
