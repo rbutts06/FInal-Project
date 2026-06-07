@@ -42,6 +42,11 @@ class Start extends Phaser.Scene{
             fontFamily: "Times, Serif",
             fontSize: 20
         });
+        this.add.text(5, 400, "made by:\nRay Butts\nEmmet Slater", {
+            fontFamily: "Times, Serif",
+            fontSize: 15
+        });
+    
     }
     update(){
         if(Phaser.Input.Keyboard.JustDown(this.key)){
