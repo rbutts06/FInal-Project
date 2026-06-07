@@ -104,8 +104,10 @@ class Level1 extends Phaser.Scene {
         my.sprite.enemy1 = new NPC(this, 550, 300, 'tile_0020.png');
         my.sprite.enemy2 = new NPC(this, 1000, 200, 'tile_0020.png');
         my.sprite.enemy3 = new NPC(this, 1500, 200, 'tile_0020.png');
-        my.sprite.enemy4 = new NPC(this, 1750, 200, 'tile_0020.png');
+        my.sprite.enemy4 = new NPC(this, 1650, 200, 'tile_0020.png');
         my.sprite.enemy5 = new NPC(this, 2200, 200, 'tile_0020.png');
+        this.enemyGroup = this.add.group();
+        this.enemyGroup.addMultiple([my.sprite.enemy1, my.sprite.enemy2, my.sprite.enemy3, my.sprite.enemy4, my.sprite.enemy5]);
         
 
         // Enable collision handling
@@ -145,6 +147,15 @@ class Level1 extends Phaser.Scene {
                 }
             });
             }
+        });
+        this.physics.add.overlap(my.sprite.player, this.enemyGroup, (obj1, obj2) => {
+            obj1.x = this.spawnX;
+            obj1.y = this.spawnY;
+            my.sprite.player.setAccelerationX(0);
+            my.sprite.player.setDragX(this.DRAG);
+            my.sprite.player.anims.play('idle');
+            // TODO: have the vfx stop playing
+            my.vfx.walking.stop();
         });
 
 
