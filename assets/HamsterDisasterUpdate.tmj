@@ -33,7 +33,7 @@
          "name":"Background",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":160,
          "x":0,
          "y":0
@@ -865,9 +865,94 @@
          "width":160,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":10,
+         "name":"Text",
+         "objects":[
+                {
+                 "height":19,
+                 "id":56,
+                 "name":"text",
+                 "opacity":1,
+                 "rotation":0,
+                 "text":
+                    {
+                     "halign":"center",
+                     "text":"If you die three times, you'll respawn back to level 1!",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":400,
+                 "x":396.5,
+                 "y":373.166666666667
+                }, 
+                {
+                 "height":57,
+                 "id":57,
+                 "name":"text",
+                 "opacity":1,
+                 "rotation":0,
+                 "text":
+                    {
+                     "halign":"center",
+                     "text":"Collect all the gems before you reach the flag!",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":122,
+                 "x":230.5,
+                 "y":194.5
+                }, 
+                {
+                 "height":50,
+                 "id":58,
+                 "name":"text",
+                 "opacity":1,
+                 "rotation":0,
+                 "text":
+                    {
+                     "halign":"center",
+                     "text":"Remember falling platforms!",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":150,
+                 "x":1893.166666667,
+                 "y":43.833333333
+                }, 
+                {
+                 "height":19,
+                 "id":59,
+                 "name":"text",
+                 "opacity":1,
+                 "rotation":0,
+                 "text":
+                    {
+                     "halign":"center",
+                     "text":"Swim on up!",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":2704.5,
+                 "y":363.833333333333
+                }],
+         "offsetx":-127.333333333333,
+         "offsety":9.99999999999997,
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":10,
- "nextobjectid":55,
+ "nextlayerid":11,
+ "nextobjectid":60,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.12.1",

@@ -53,6 +53,26 @@ class LevelTwo extends Phaser.Scene {
             key: "tilemap_sheet",
             frame: 67
         });
+        
+        this.textLayer = this.map.getObjectLayer('Text');
+
+        if (this.textLayer && this.textLayer.objects) {
+            this.textLayer.objects.forEach(obj => {
+                if (obj.text) {
+                    const textObj = this.add.text(obj.x, obj.y, obj.text.text, {
+                        fontFamily: obj.text.fontfamily || 'Tahoma',
+                        fontSize: `${obj.text.pixelsize || 16}px`,
+                        color: obj.text.color || '#000000',
+                        align: obj.text.halign || 'center',
+                        wordWrap: { width: obj.width || 0 }
+                    });
+                }
+            });
+        } 
+    
+
+
+
          this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
         this.coinGroup = this.add.group(this.coins);
 
@@ -318,8 +338,8 @@ class LevelTwo extends Phaser.Scene {
     this.isDying = true;
     my.sprite.player.setVelocity(0, 0);
     my.sprite.player.setAcceleration(0, 0);
-
     my.sprite.player.setTint(0xff0000);
+    my.sprite.player.input.enabled = false;
 
     this.tweens.add({
         targets: my.sprite.player,
@@ -330,9 +350,10 @@ class LevelTwo extends Phaser.Scene {
         onComplete: () => {
             if (this.health > 0){
                 this.health -= 1;
-                console.log(this.health);
-                my.sprite.player.x = this.SpawnX;
+                //console.log(this.health);
                 my.sprite.player.y = this.SpawnY;
+                my.sprite.player.x = this.SpawnX;
+                my.sprite.player.input.enabled = true;
             } else if(this.health == 0){
                 console.log(this.health);
                 this.scene.start("level1Scene");
