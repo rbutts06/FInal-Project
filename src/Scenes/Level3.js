@@ -15,7 +15,7 @@ class Level3 extends Phaser.Scene{
         this.swimming = false;
     } 
     create(){
-        
+        this.scene.launch('UIScene');
         this.key = this.input.keyboard.addKey('E');
         this.spawnX = 30;
         this.spawnY = 200;

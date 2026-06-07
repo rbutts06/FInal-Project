@@ -20,6 +20,7 @@ class LevelTwo extends Phaser.Scene {
 
     create() {
         console.log("create started");
+        this.scene.launch('UIScene');
         this.map = this.add.tilemap("HamsterDisasterUpdate", 18, 18, 160, 25);
         this.jumpSound = this.sound.add("jumping", 1);
         this.collectSound = this.sound.add("collect", 1);
@@ -396,6 +397,7 @@ class LevelTwo extends Phaser.Scene {
             my.sprite.player.setTint('#ffffff');
             if (this.health > 0){
                 this.health -= 1;
+                this.game.events.emit('updateLives', this.health);
                 //console.log(this.health);
                 my.sprite.player.y = this.SpawnY;
                 my.sprite.player.x = this.SpawnX;
