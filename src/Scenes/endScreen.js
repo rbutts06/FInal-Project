@@ -12,9 +12,9 @@ class End extends Phaser.Scene{
         this.SCALE = 2.0;
     }
     create(){
-        this.background = this.sound.add("song", 1);
-        this.background.loop = true;
-        this.background.play();
+        this.music = this.sound.add("song", 1);
+        this.music.loop = true;
+        this.music.play();
         this.spawnX = 400;
         this.spawnY = 200;
         this.end = this.add.tilemap("endScreen", 18, 18, 40, 25);
@@ -40,6 +40,7 @@ class End extends Phaser.Scene{
         this.physics.add.collider(my.sprite.player, this.endLayer);
 
         this.physics.add.overlap(my.sprite.player, this.snowGroup, (obj1, obj2) => {
+            this.music.stop();
             this.scene.start("level1Scene");
         });
 
