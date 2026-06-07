@@ -21,7 +21,8 @@ class Load extends Phaser.Scene {
 
         this.load.audio("collect", "collection.mp3");
         this.load.audio("jumping", "jumper.mp3");
-        this.load.audio("bang", "jingles_HIT14.ogg")
+        this.load.audio("bang", "jingles_HIT14.ogg");
+        this.load.audio("song", "lightbeatsmusic-joyful-rhythm-walk-funk-513936.mp3");
 
         // Load the tilemap as a spritesheet
         this.load.spritesheet("tilemap_sheet", "tilemap_packed.png", {
